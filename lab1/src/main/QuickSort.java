@@ -9,12 +9,15 @@ import misc.Tuple;
 
 /**
  * Class for quick-sort operations.
- * @author Robin
+ * @author Robin, Oskar
  *
  */
 public class QuickSort {
 	//private static int pivotIndex;	// this is used to keep track of the pivot node.
 	
+	/**
+	 * Main method
+	 */
 	public static void main(String[] args) {
 		NodeList<Integer> list = new NodeList<Integer>();
 		Random r = new Random();
@@ -36,23 +39,23 @@ public class QuickSort {
 	 */
 	public static void sort(NodeChain<Integer> list) {
 		
-		if(list.getSize() <= 1) {				// return if the list has 1 or 0 elements.
+		if(list.getSize() <= 1) {									// Return if the list has 1 or 0 elements.
 			return;
 		}
 		
-		Integer pivotIndex = (int)(Math.random()*list.getSize());	// create a random pivot index.
+		Integer pivotIndex = (int)(Math.random()*list.getSize());	// Create a random pivot index.
 		Node<Integer> pivotNode = list.findNode(pivotIndex);		
 		
 		pivotIndex = SortFromPivot(list, pivotNode.getValue(), pivotIndex);
-
-		if (list.getSize() <= 2) {				// the list is too small for further sorting. It is already sorted.
+		
+		if (list.getSize() <= 2) {									// The list is too small for further sorting. It is already sorted.
 			return;
 		}
 		
-		// split the chain in two parts.
+		// Splits the chain into two parts.
 		Tuple<NodeChain<Integer>, NodeChain<Integer>> split = list.splitChain(pivotNode, pivotIndex);
 
-		// sort the individual chains.
+		// Sort the individual chains. (Recursive step)
 		sort(split.x);
 		sort(split.y);
 	}
@@ -85,8 +88,8 @@ public class QuickSort {
 		Iterator<Node<Integer>> iterator = list.iterator();
 		Node<Integer> node;
 		
-		// first iterate from index 0 to pivIndex-1.
-		// move to right if the value is larger than the pivot value.
+		// First iterate from index 0 to pivIndex-1.
+		// Move to the right if the value is larger than the pivot value.
 		for (; i < pivIndex; i++) {
 			node = iterator.next();
 			if (node.getValue() > pivot) {
@@ -95,12 +98,12 @@ public class QuickSort {
 			}
 		}
 		
-		// we have reached the pivot node. Skip it.
+		// We have reached the pivot node. Skip it.
 		iterator.next();
 		i++;
 		
-		// step 2: iterate from pivIndex + 1 to the last index.
-		// move to left if the value is smaller than the pivot value.
+		// Step 2: Iterate from pivIndex + 1 to the last index.
+		// Move to the left if the value is smaller than the pivot value.
 		for (; i < list.getSize(); i++) {
 			node = iterator.next();
 			if (node.getValue() < pivot) {

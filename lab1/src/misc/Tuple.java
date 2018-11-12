@@ -1,7 +1,7 @@
 package misc;
 
 /**
- * tuple class.
+ * Tuple class.
  * @author Robin
  *
  * @param <X> - First element.
