@@ -136,6 +136,9 @@ public class NodeChain<E> implements Iterable<Node<E>> {
 
 			@Override
 			public Node<E> next() {
+				if (!this.hasNext()) {
+					throw new IndexOutOfBoundsException();
+				}
 				previous = this.current;
 				this.current = this.current.getNext();
 				return previous;
