@@ -1,5 +1,6 @@
 package main;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import list.*;
@@ -81,16 +82,31 @@ public class QuickSort {
 		
 		int newIndex = pivIndex;
 		int i = 0;
+		Iterator<Node<Integer>> iterator = list.iterator();
+		Node<Integer> node;
 		
-		for (Node<Integer> node : list) {
-			if (i < pivIndex && node.getValue() > pivot) {
+		// first iterate from index 0 to pivIndex-1.
+		// move to right if the value is larger than the pivot value.
+		for (; i < pivIndex; i++) {
+			node = iterator.next();
+			if (node.getValue() > pivot) {
 				list.moveLast(node);
 				newIndex --;
-			} else if (i > pivIndex && node.getValue() < pivot) {
-				list.moveFirst(node);
-				newIndex ++;
 			}
-			i++;
+		}
+		
+		// we have reached the pivot node. Skip it.
+		iterator.next();
+		i++;
+		
+		// step 2: iterate from pivIndex + 1 to the last index.
+		// move to left if the value is smaller than the pivot value.
+		for (; i < list.getSize(); i++) {
+			node = iterator.next();
+			if (node.getValue() < pivot) {
+				list.moveFirst(node);
+				newIndex++;
+			}
 		}
 		return newIndex;
 	}
