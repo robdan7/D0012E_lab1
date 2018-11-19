@@ -13,7 +13,8 @@ import misc.Tuple;
  *
  */
 public class QuickSort {
-	//private static int pivotIndex;	// this is used to keep track of the pivot node.
+	private int comparisons;
+	private float sortingTime;
 	
 	/**
 	 * Main method
@@ -27,17 +28,42 @@ public class QuickSort {
 			list.appendEnd(r.nextInt(stop));
 		}
 
-		sort(list.createNodeChain());
+		new QuickSort().sort(list, PivotPositions.RANDOM);
 		System.out.println(list);
+		
 		//System.out.println();
 	}	
+	
+	
+	public void sort(NodeList<Integer> list, QuickSort.PivotPositions pivot) {
+		this.comparisons = 0;
+		this.sortingTime = 0f;
+		float oldTime = System.currentTimeMillis();
+		
+		switch(pivot) {
+		case LAST:
+			// TODO add sorting for the last element.
+			break;
+		case RANDOM:
+			this.sortRandom(list.createNodeChain());
+		case MIDDLE:
+			// Todo add sorting for the last element.
+			break;
+		default:
+			break;
+		}
+		
+		float newTime = System.currentTimeMillis();
+		
+		this.sortingTime = newTime-oldTime;
+	}
 	
 	/**
 	 * Sort a list using quick-sort. The pivot is chosen randomly.
 	 * @param list - A {@link NodeChain} containing all elements to sort.
 	 * @return
 	 */
-	public static void sort(NodeChain<Integer> list) {
+	private void sortRandom(NodeChain<Integer> list) {
 		
 		if(list.getSize() <= 1) {									// Return if the list has 1 or 0 elements.
 			return;
@@ -56,8 +82,17 @@ public class QuickSort {
 		Tuple<NodeChain<Integer>, NodeChain<Integer>> split = list.splitChain(pivotNode, pivotIndex);
 
 		// Sort the individual chains. (Recursive step)
-		sort(split.x);
-		sort(split.y);
+		sortRandom(split.x);
+		sortRandom(split.y);
+	}
+	
+	
+	public void sortLastPivot(NodeList<Integer> list) {
+		
+	}
+	
+	public void sortFirstPivot(NodeList<Integer> list) {
+		
 	}
 	
 	/**
@@ -78,7 +113,7 @@ public class QuickSort {
 	 * @param pivot - the pivot number.
 	 * @return The new pivot index. Useful if the pivot index is used directly after this function.
 	 */
-	private static int SortFromPivot(NodeChain<Integer> list, int pivot, int pivIndex) {
+	private int SortFromPivot(NodeChain<Integer> list, int pivot, int pivIndex) {
 		if (list.isEmpty()) {
 			return 0;
 		}
@@ -96,6 +131,7 @@ public class QuickSort {
 				list.moveLast(node);
 				newIndex --;
 			}
+			this.comparisons ++;
 		}
 		
 		// We have reached the pivot node. Skip it.
@@ -110,7 +146,51 @@ public class QuickSort {
 				list.moveFirst(node);
 				newIndex++;
 			}
+			this.comparisons ++;
 		}
 		return newIndex;
+	}
+	
+	public static enum PivotPositions{
+		LAST, RANDOM, MIDDLE;
+		
+		@Override
+		public String toString() {
+			String s = "";
+			switch (this) {
+			case LAST:
+				s = "last";
+				break;
+			case RANDOM:
+				s = "random";
+				break;
+			case MIDDLE:
+				s = "middle";
+				break;
+			}
+			return s;
+		}
+	}
+	
+	/**
+	 * Class for generating unsupported pivot exceptions. The pivot is not supported if
+	 * this exception is thrown.
+	 * @author Robin
+	 *
+	 */
+	public static class UnsupportedPivotException extends Exception {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 853436763252048434L;
+		private final PivotPositions pivot;
+		public UnsupportedPivotException(PivotPositions pivot) {
+			this.pivot = pivot;
+		}
+		
+		@Override
+		public void printStackTrace() {
+			System.out.println(pivot);
+		}
 	}
 }
