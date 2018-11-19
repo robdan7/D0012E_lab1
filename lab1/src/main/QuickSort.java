@@ -14,31 +14,10 @@ import misc.Tuple;
  */
 public class QuickSort {
 	private int comparisons;
-	private float sortingTime;
-	
-	/**
-	 * Main method
-	 */
-	public static void main(String[] args) {
-		NodeList<Integer> list = new NodeList<Integer>();
-		Random r = new Random();
-		
-		int stop = 10;
-		for (int i = 0; i < stop; i++) {
-			list.appendEnd(r.nextInt(stop));
-		}
-
-		new QuickSort().sort(list, PivotPositions.RANDOM);
-		System.out.println(list);
-		
-		//System.out.println();
-	}	
 	
 	
 	public void sort(NodeList<Integer> list, QuickSort.PivotPositions pivot) {
 		this.comparisons = 0;
-		this.sortingTime = 0f;
-		float oldTime = System.currentTimeMillis();
 		
 		switch(pivot) {
 		case LAST:
@@ -47,15 +26,11 @@ public class QuickSort {
 		case RANDOM:
 			this.sortRandom(list.createNodeChain());
 		case MIDDLE:
-			// Todo add sorting for the last element.
+			// TODO add sorting for the middle element.
 			break;
 		default:
 			break;
 		}
-		
-		float newTime = System.currentTimeMillis();
-		
-		this.sortingTime = newTime-oldTime;
 	}
 	
 	/**
@@ -192,5 +167,16 @@ public class QuickSort {
 		public void printStackTrace() {
 			System.out.println(pivot);
 		}
+	}
+	
+	
+	public int getComparisons() {
+		return this.comparisons;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "comparisons: " + this.comparisons;
 	}
 }
