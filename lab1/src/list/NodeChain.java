@@ -61,7 +61,11 @@ public class NodeChain<E> implements Iterable<Node<E>> {
 		return this.first.findNodeValue(index);
 	}
 	
-	@Deprecated
+	/**
+	 * Find the node at a specified index.
+	 * @param index - The index.
+	 * @return Node at the index.
+	 */
 	public Node<E> findNode(int index) {
 		if (index < 0 || index >= this.getSize()) {
 			throw new IndexOutOfBoundsException();
