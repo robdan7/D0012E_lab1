@@ -9,6 +9,11 @@ import jxl.write.Number;
 import jxl.write.biff.RowsExceededException;
 import list.NodeList;
 
+/**
+ * 
+ * @author Robin, Oskar
+ *
+ */
 public class QuickSortAnalyzer {
 	private QuickSort sorter;
 	private int intervalSize, iterations;
@@ -22,17 +27,16 @@ public class QuickSortAnalyzer {
 	public static void main(String[] args) {
 		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(1000, 50);
 		
-		System.out.println("analyzing interval");
+		System.out.println("Analyzing interval");
 		analyzer.analyzeInterval(QuickSort.PivotPositions.RANDOM);
 
 		try {
-			System.out.println("exporting...");
+			System.out.println("Exporting...");
 			analyzer.exportToExcel("test.xls");
 		} catch (WriteException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("done!");
+		System.out.println("Done!");
 		
 	}	
 
@@ -43,7 +47,7 @@ public class QuickSortAnalyzer {
 	}
 	
 	/**
-	 * sort a random list several times with different sizes. The result is put in a private list 
+	 * Sort a random list several times with different sizes. The result is put in a private list 
 	 * obtained by calling {@link #toString()}.
 	 * @param pivot - The pivot element
 	 */
@@ -64,13 +68,13 @@ public class QuickSortAnalyzer {
 	}
 	
 	/**
-	 * Sort a random list several times with the same size. The result is average, and put in a
+	 * Sort a random list several times with the same size. The result is the algorithms average time which is put in a
 	 * private list obtained by calling {@link #toString()}.
 	 * @param pivot - The pivot element.
 	 */
 	public void analyzeRepeated(QuickSort.PivotPositions pivot) {
 		NodeList<Integer> list;
-		this.timings = new double[1];
+		this.timings = new double[1];		
 		this.comparisons = new float[1];
 		double averageTime = 0;
 		float averageComparison = 0;
@@ -102,7 +106,7 @@ public class QuickSortAnalyzer {
 	}
 	
 	/**
-	 * Export all data to an auto-generated excel file. Yes, I'm a lazy man.
+	 * Export all data to an auto-generated "Microsoft Excel ©" file.
 	 * @throws IOException 
 	 * @throws WriteException 
 	 * @throws RowsExceededException 
