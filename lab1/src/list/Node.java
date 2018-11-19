@@ -50,7 +50,7 @@ public class Node<E> {
 	 * Remove this node from the chain. Do not remove this node while iterating over it.
 	 * @return
 	 */
-	public Node<E> removeThis() {
+	Node<E> removeThis() {
 		this.getNext().setPrevious(this.getPrevious());
 		this.getPrevious().setNext(this.getNext());
 		return this;
@@ -120,7 +120,7 @@ public class Node<E> {
 	 * Get the previous node.
 	 * @return
 	 */
-	public Node<E> getPrevious() {
+	Node<E> getPrevious() {
 		return this.previous;
 	}
 	
