@@ -26,7 +26,7 @@ public class QuickSortAnalyzer {
 	 */
 	public static void main(String[] args) {
 		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(1000, 50);
-		
+		/*
 		System.out.println("Analyzing interval");
 		analyzer.analyzeInterval(QuickSort.PivotPositions.RANDOM);
 
@@ -37,7 +37,35 @@ public class QuickSortAnalyzer {
 			e.printStackTrace();
 		}
 		System.out.println("Done!");
+		*/
 		
+		QuickSort sorter1 = new QuickSort();
+		QuickSort sorter2 = new QuickSort();
+		
+		
+		NodeList<Integer> list1 = new NodeList<Integer>();
+		int[] list2 = new int[100000];
+		Random r = new Random();
+		for (int i = 0; i < list2.length; i++) {
+			int x = r.nextInt(list2.length);
+			list1.appendEnd(x);
+			list2[i] = x;
+		}
+		
+		double time1 = System.currentTimeMillis();
+		sorter1.sort(list2, 0, list2.length-1);
+		double time2 = System.currentTimeMillis();
+		
+		double delta1 = time2-time1;
+		
+		time1 = System.currentTimeMillis();
+		sorter2.sort(list1, QuickSort.PivotPositions.RANDOM);
+		time2 = System.currentTimeMillis();
+		
+		double delta2 = time2-time1;
+		
+		System.out.println("time for array: " + Double.toString(delta1));
+		System.out.println("time for nodelist :" + Double.toString(delta2));
 	}	
 
 	public QuickSortAnalyzer(int interval, int iterations) {
