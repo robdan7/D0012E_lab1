@@ -95,7 +95,7 @@ public class QuickSort {
 			int partitionIndex = partition(list, lowIndex, highIndex);
 			 // Sortera vänster och höger om partitionIndex allstå PIVOT.
 			sort(list, lowIndex, partitionIndex-1);
-			sort(list, partitionIndex-1, highIndex);
+			sort(list, partitionIndex+1, highIndex);
 			
 		}
 		
