@@ -101,7 +101,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 	private Tuple<NodeChain<Integer>, NodeChain<Integer>> recursiveSorter(NodeChain<Integer> list, int pivotIndex) {
 		Node<Integer> pivotNode = list.findNode(pivotIndex);
 
-		pivotIndex = SortFromPivot(list, pivotNode.getValue(), pivotIndex);
+		pivotIndex = sortFromPivot(list, pivotNode.getValue(), pivotIndex);
 
 		if (list.getSize() <= 2) { // The list is too small for further sorting. It is already sorted.
 			return new Tuple<NodeChain<Integer>, NodeChain<Integer>>(null, null);
@@ -119,7 +119,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 	 * @return The new pivot index. Useful if the pivot index is used directly after
 	 *         this function.
 	 */
-	private int SortFromPivot(NodeChain<Integer> list, int pivot, int pivIndex) {
+	private int sortFromPivot(NodeChain<Integer> list, int pivot, int pivIndex) {
 		if (list.isEmpty()) {
 			return 0;
 		}
