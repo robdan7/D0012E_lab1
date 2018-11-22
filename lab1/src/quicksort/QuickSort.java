@@ -24,8 +24,6 @@ public interface QuickSort<A> {
 			case MIDDLE:
 				s = "middle";
 				break;
-			default:
-				throw new UnsupportedPivotException(pivot);
 			}
 			return s;
 		}
