@@ -23,11 +23,12 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 			break;
 		case RANDOM:
 			this.sortRandom(list.createNodeChain());
+			break;
 		case MIDDLE:
 			this.sortMiddle(list.createNodeChain());
 			break;
 		default:
-			throw new UnsupportedPivotException(pivot);	// the pivot is neither last, random or middle (it's null etc).
+			throw new UnsupportedPivotException(pivot);	// The pivot is neither last, random or middle (it's null etc).
 		}
 		
 	}
