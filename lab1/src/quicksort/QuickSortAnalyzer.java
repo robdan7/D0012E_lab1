@@ -1,4 +1,4 @@
-package main;
+package quicksort;
 
 import java.util.Random;
 import java.io.File;
@@ -8,6 +8,8 @@ import jxl.write.*;
 import jxl.write.Number;
 import jxl.write.biff.RowsExceededException;
 import list.NodeList;
+import quicksort.QuickSort.PivotPositions;
+import quicksort.QuickSort.UnsupportedPivotException;
 
 /**
  * 
@@ -15,7 +17,7 @@ import list.NodeList;
  *
  */
 public class QuickSortAnalyzer {
-	private QuickSort sorter;
+	private ListSort sorter;
 	private int intervalSize, iterations;
 	private double[] timings;
 	private float[] comparisons;
@@ -25,10 +27,15 @@ public class QuickSortAnalyzer {
 	 * Main method
 	 */
 	public static void main(String[] args) {
-		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(1000, 50);
+		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(5000, 100);
 		
 		System.out.println("Analyzing interval");
-		analyzer.analyzeInterval(QuickSort.PivotPositions.RANDOM);
+		try {
+			analyzer.analyzeInterval(PivotPositions.FIRST);
+		} catch (UnsupportedPivotException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		try {
 			System.out.println("Exporting...");
@@ -43,15 +50,16 @@ public class QuickSortAnalyzer {
 	public QuickSortAnalyzer(int interval, int iterations) {
 		this.intervalSize = interval;
 		this.iterations = iterations;
-		this.sorter = new QuickSort();
+		this.sorter = new ListSort();
 	}
 	
 	/**
 	 * Sort a random list several times with different sizes. The result is put in a private list 
 	 * obtained by calling {@link #toString()}.
 	 * @param pivot - The pivot element
+	 * @throws UnsupportedPivotException 
 	 */
-	public void analyzeInterval(QuickSort.PivotPositions pivot) {
+	public void analyzeInterval(PivotPositions pivot) throws UnsupportedPivotException {
 		NodeList<Integer> list;
 		this.timings = new double[this.iterations];
 		this.comparisons = new float[this.iterations];
@@ -71,8 +79,9 @@ public class QuickSortAnalyzer {
 	 * Sort a random list several times with the same size. The result is the algorithms average time which is put in a
 	 * private list obtained by calling {@link #toString()}.
 	 * @param pivot - The pivot element.
+	 * @throws UnsupportedPivotException 
 	 */
-	public void analyzeRepeated(QuickSort.PivotPositions pivot) {
+	public void analyzeRepeated(PivotPositions pivot) throws UnsupportedPivotException {
 		NodeList<Integer> list;
 		this.timings = new double[1];		
 		this.comparisons = new float[1];
