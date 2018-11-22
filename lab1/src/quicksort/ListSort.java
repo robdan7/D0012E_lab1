@@ -13,6 +13,19 @@ import quicksort.QuickSort.PivotPositions;
  */
 public class ListSort implements QuickSort<NodeList<Integer>> {
 	private int comparisons;
+	
+	public static void main(String[] args) {
+		NodeList<Integer> list = QuickSortAnalyzer.generateList(5);
+		ListSort sorter = new ListSort();
+		try {
+			new ListSort().sort(list, PivotPositions.RANDOM);
+			sorter.sort(list, PivotPositions.FIRST);
+		} catch (UnsupportedPivotException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(sorter.comparisons);
+	}
 
 	@Override
 	public void sort(NodeList<Integer> list, PivotPositions pivot) throws UnsupportedPivotException {
@@ -101,7 +114,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 	private Tuple<NodeChain<Integer>, NodeChain<Integer>> recursiveSorter(NodeChain<Integer> list, int pivotIndex) {
 		Node<Integer> pivotNode = list.findNode(pivotIndex);
 
-		pivotIndex = sortFromPivot(list, pivotNode.getValue(), pivotIndex);
+		pivotIndex = SortFromPivot(list, pivotNode.getValue(), pivotIndex);
 
 		if (list.getSize() <= 2) { // The list is too small for further sorting. It is already sorted.
 			return new Tuple<NodeChain<Integer>, NodeChain<Integer>>(null, null);
@@ -119,7 +132,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 	 * @return The new pivot index. Useful if the pivot index is used directly after
 	 *         this function.
 	 */
-	private int sortFromPivot(NodeChain<Integer> list, int pivot, int pivIndex) {
+	private int SortFromPivot(NodeChain<Integer> list, int pivot, int pivIndex) {
 		if (list.isEmpty()) {
 			return 0;
 		}
@@ -167,3 +180,4 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 		return "comparisons: " + this.comparisons;
 	}
 }
+ 

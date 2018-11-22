@@ -164,6 +164,15 @@ public class NodeList<A> implements Iterable<Node<A>> {
 		return iterator;
 	}
 	
+
+	public NodeList<A> copy() {
+		NodeList<A> newList = new NodeList<A>();
+		for (Node<A> node : this) {
+			newList.appendEnd(node.getValue());
+		}
+		return newList;
+	}
+	
 	@Override
 	public String toString() {
 		return "{" + this.start.getNext().toString() + "}";
