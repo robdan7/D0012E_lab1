@@ -68,8 +68,8 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 		Tuple<NodeChain<Integer>, NodeChain<Integer>> split = this.recursiveSorter(list, pivotIndex);
 
 		// Sort the individual chains. (Recursive step)
-		sortRandom(split.x);
-		sortRandom(split.y);
+		sortFirst(split.x);
+		sortFirst(split.y);
 	}
 	
 	
@@ -88,8 +88,8 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 		Tuple<NodeChain<Integer>, NodeChain<Integer>> split = this.recursiveSorter(list, pivotIndex);
 
 		// Sort the individual chains. (Recursive step)
-		sortRandom(split.x);
-		sortRandom(split.y);
+		sortMiddle(split.x);
+		sortMiddle(split.y);
 	}
 	
 	/**
