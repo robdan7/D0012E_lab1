@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * @author Robin
  *
  */
-public class NodeList<A> implements Iterable<Node<A>> {
+public class NodeList<A> implements Iterable<A> {
 	private Node<A> start, end;
 	private int size = 0;
 	
@@ -27,7 +27,7 @@ public class NodeList<A> implements Iterable<Node<A>> {
 		if (this.isEmpty()) {
 			throw new NullPointerException("the list is empty!");
 		}
-		return new NodeChain<A>(this.getFirst(), this.getLast(), this.getSize());
+		return new NodeChain<A>(this.getFirstNode(), this.getLastNode(), this.getSize());
 	}
 	
 	
@@ -92,7 +92,7 @@ public class NodeList<A> implements Iterable<Node<A>> {
 	/**
 	 * @return The first element in the list.
 	 */
-	private Node<A> getFirst() {
+	private Node<A> getFirstNode() {
 		if (this.isEmpty()) {
 			throw new IndexOutOfBoundsException("the array is empty");
 		}
@@ -102,11 +102,19 @@ public class NodeList<A> implements Iterable<Node<A>> {
 	/**
 	 * @return The last element in the list.
 	 */
-	private Node<A> getLast() {
+	private Node<A> getLastNode() {
 		if (this.isEmpty()) {
 			throw new IndexOutOfBoundsException("the array is empty");
 		}
 		return this.end.getPrevious();
+	}
+	
+	public A getFirst() {
+		return this.getFirstNode().getValue();
+	}
+	
+	public A getLast() {
+		return this.getLastNode().getValue();
 	}
 	
 	/**
@@ -143,8 +151,8 @@ public class NodeList<A> implements Iterable<Node<A>> {
 	}
 	
 	@Override
-	public Iterator<Node<A>> iterator() {
-		Iterator<Node<A>> iterator = new Iterator<Node<A>>() {
+	public Iterator<A> iterator() {
+		Iterator<A> iterator = new Iterator<A>() {
 			Node<A> n = start;
 			@Override
 			public boolean hasNext() {
@@ -152,12 +160,12 @@ public class NodeList<A> implements Iterable<Node<A>> {
 			}
 
 			@Override
-			public Node<A> next() {
+			public A next() {
 				if (!this.hasNext()) {
 					throw new NoSuchElementException();
 				}
 				n = n.getNext();
-				return n;
+				return n.getValue();
 			}
 			
 		};
@@ -167,8 +175,8 @@ public class NodeList<A> implements Iterable<Node<A>> {
 
 	public NodeList<A> copy() {
 		NodeList<A> newList = new NodeList<A>();
-		for (Node<A> node : this) {
-			newList.appendEnd(node.getValue());
+		for (A value : this) {
+			newList.appendEnd(value);
 		}
 		return newList;
 	}

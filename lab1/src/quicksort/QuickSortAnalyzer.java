@@ -1,5 +1,7 @@
 package quicksort;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import jxl.write.*;
 import jxl.write.Number;
 import jxl.write.biff.RowsExceededException;
 import list.NodeList;
+import misc.Tuple;
 import quicksort.QuickSort.PivotPositions;
 import quicksort.QuickSort.UnsupportedPivotException;
 
@@ -19,38 +22,57 @@ import quicksort.QuickSort.UnsupportedPivotException;
 public class QuickSortAnalyzer {
 	private ListSort sorter;
 	private int intervalSize, iterations;
-	private long[][] timings;
-	private float[][] comparisons;
+	private NodeList<Tuple<PivotPositions,long[]>> timings;
+	private NodeList<Tuple<PivotPositions,int[]>> comparisons;
 	
 	
 	public QuickSortAnalyzer(int intervalSize, int iterations) {
 		this.intervalSize = intervalSize;
 		this.iterations = iterations;
 		this.sorter = new ListSort();
+		
+		this.timings = new NodeList<Tuple<PivotPositions,long[]>>();
+		this.comparisons = new NodeList<Tuple<PivotPositions,int[]>>();
+		
+		for (PivotPositions p : PivotPositions.values()) {
+			Tuple tup = new Tuple<PivotPositions,long[]>(p, new long[this.iterations]);
+			this.timings.appendEnd(tup);
+			
+			tup = new Tuple<PivotPositions,int[]>(p, new int[this.iterations]);
+			this.comparisons.appendEnd(tup);
+		}
 	}
 
 	/**
 	 * Main method
 	 */
 	public static void main(String[] args) {
-		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(10000, 50);
-		//ListSort sort = new ListSort();
-		//analyzer.analyzeListAndExport(0, PivotPositions.FIRST);
-		//analyzer.analyzeListAndExport(1, PivotPositions.MIDDLE);
-		//analyzer.analyzeListAndExport(2, PivotPositions.RANDOM);
-		System.out.println("Analyzing interval");
-		analyzer.analyzeListAndExport();
+		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(10, 5);
 		
+		try {
+			analyzer.analyzeInterval();
+		} catch (UnsupportedPivotException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
+		try {
+			analyzer.exportToExcel("analyzed.xls");
+		} catch (RowsExceededException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	private void completeAnalyze() {
-	
-	}
-	
+	@Deprecated
 	private void analyzeListAndExport() {
-		String[] file = {"first.xls"," middle.xls"," random.xls"};
+		/*String[] file = {"first.xls"," middle.xls"," random.xls"};
 		
 		try {
 			this.analyzeInterval();
@@ -68,6 +90,7 @@ public class QuickSortAnalyzer {
 			e.printStackTrace();
 		}
 		System.out.println("Done!");
+		*/
 	}
 	
 	/**
@@ -77,13 +100,27 @@ public class QuickSortAnalyzer {
 	 */
 	public void analyzeInterval() throws UnsupportedPivotException {
 		NodeList<Integer> list;
-		this.timings = new long[3][this.iterations];
-		this.comparisons = new float[3][this.iterations];
-		double oldTime, newTime;
+		Iterator<Tuple<PivotPositions, long[]>> timingIterator;
+		Iterator<Tuple<PivotPositions, int[]>> comparisonIterator;
+		Tuple<PivotPositions, long[]> timingTuple;
+		Tuple<PivotPositions, int[]> comparisonTuple;
+
 		for (int i = 0, j = this.intervalSize; i < this.iterations; i++, j += this.intervalSize) {
 			list = generateList(j);
+			timingIterator = this.timings.iterator();
+			comparisonIterator = this.comparisons.iterator();
+			
+			// we need to iterate over two list at the same time. Use iterators.
+			while (timingIterator.hasNext() && comparisonIterator.hasNext()) {
+				timingTuple = timingIterator.next();
+				timingTuple.y[i] = this.analyzeSingular(list.copy(), timingTuple.x);	// use a copy of the original list.
+				
+				comparisonTuple = comparisonIterator.next();
+				comparisonTuple.y[i] = this.sorter.getComparisons();
+			}
 			
 			/*
+			
 			oldTime = System.currentTimeMillis();
 			this.sorter.sort(list, pivot);
 			newTime = System.currentTimeMillis();
@@ -91,16 +128,8 @@ public class QuickSortAnalyzer {
 			*/
 			//this.comparisons[0] = this.sorter.getComparisons();
 
-			
-			this.timings[0][i] = this.analyzeSingular(list.copy(), PivotPositions.FIRST);
-			this.comparisons[0][i] = this.sorter.getComparisons();
-			
-			this.timings[1][i] = this.analyzeSingular(list.copy(), PivotPositions.MIDDLE);
-			this.comparisons[1][i] = this.sorter.getComparisons();
-			
-			this.timings[2][i] = this.analyzeSingular(list.copy(), PivotPositions.RANDOM);
-			this.comparisons[2][i] = this.sorter.getComparisons();
 		}
+		
 	}
 	
 	private long analyzeSingular(NodeList<Integer> list, PivotPositions pivot) throws UnsupportedPivotException {
@@ -121,7 +150,7 @@ public class QuickSortAnalyzer {
 	 * @throws UnsupportedPivotException 
 	 */
 	public void analyzeRepeated(PivotPositions pivot) throws UnsupportedPivotException {
-		NodeList<Integer> list;
+		/*NodeList<Integer> list;
 		this.timings = new long[1];		
 		this.comparisons = new float[1];
 		double averageTime = 0;
@@ -141,6 +170,7 @@ public class QuickSortAnalyzer {
 		averageComparison /= this.iterations;
 		this.timings[0] = averageTime;
 		this.comparisons[0] = averageComparison;
+		*/
 	}
 	
 	public static NodeList<Integer> generateList(int size) {
@@ -159,7 +189,7 @@ public class QuickSortAnalyzer {
 	 * @throws WriteException 
 	 * @throws RowsExceededException 
 	 */
-	public void exportToExcel(int k,String filename) throws IOException, RowsExceededException, WriteException {
+	public void exportToExcel(String filename) throws IOException, RowsExceededException, WriteException {
 		int row, column;
 		
 		
@@ -172,30 +202,20 @@ public class QuickSortAnalyzer {
 		sheet.addCell(label);
 		
 		Number number;
-		for (int i = 0; i < this.timings.length; i++) {
-			row ++;
-			number = new Number(column, row, (i+1)*this.intervalSize);
-			sheet.addCell(number);
-		}
 		
-		row = 0;
-		column ++;
-		label = new Label(column, row, "time");
-		sheet.addCell(label);
-		for (int i = 0; i < this.timings.length; i++) {
-			row ++;
-			number = new Number(column, row, this.timings[k][i]);
-			sheet.addCell(number);
-		}
-		
-		row = 0;
-		column ++;
-		label = new Label(column, row, "comparisons");
-		sheet.addCell(label);
-		for (int i = 0; i < this.comparisons.length; i++) {
-			row ++;
-			number = new Number(column, row, this.comparisons[k][i]);
-			sheet.addCell(number);
+
+		for (Tuple<PivotPositions, long[]> tup : this.timings) {
+			
+			row = 0;
+			column += 2;
+			label = new Label(column,row,tup.x.toString());
+			sheet.addCell(label);
+			
+			for (int i = 0; i< tup.y.length; i++) {
+				row ++;
+				number = new Number(column, row, tup.y[i]);
+				sheet.addCell(number);
+			}
 		}
 		
 		book.write();
