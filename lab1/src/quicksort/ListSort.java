@@ -4,6 +4,7 @@ import java.util.Iterator;
 import list.*;
 import misc.Tuple;
 import quicksort.QuickSort.PivotPositions;
+import sortingAnalyzer.QuickSortAnalyzer;
 
 /**
  * Class for quick-sort operations.
@@ -14,8 +15,9 @@ import quicksort.QuickSort.PivotPositions;
 public class ListSort implements QuickSort<NodeList<Integer>> {
 	private int comparisons;
 	
+	@Deprecated
 	public static void main(String[] args) {
-		NodeList<Integer> list = QuickSortAnalyzer.generateList(5);
+		/*NodeList<Integer> list = QuickSortAnalyzer.generateList(5);
 		ListSort sorter = new ListSort();
 		try {
 			new ListSort().sort(list, PivotPositions.RANDOM);
@@ -25,6 +27,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 			e.printStackTrace();
 		}
 		System.out.println(sorter.comparisons);
+		*/
 	}
 
 	@Override

@@ -121,7 +121,7 @@ public class NodeList<A> implements Iterable<A> {
 	 * Remove the first element from the list.
 	 * @return The element of the first node.
 	 */
-	public A rmStart() {
+	public A rmFirst() {
 		if (this.isEmpty()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -133,7 +133,7 @@ public class NodeList<A> implements Iterable<A> {
 	 * Remove the last element from the list.
 	 * @return The element of the last node.
 	 */
-	public A rmEnd() {
+	public A rmLast() {
 		if (this.isEmpty()) {
 			throw new IndexOutOfBoundsException();
 		}
