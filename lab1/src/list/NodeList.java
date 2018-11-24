@@ -76,8 +76,8 @@ public class NodeList<A> implements Iterable<A> {
 		
 
 		while (n != null && !n.equals(end)) {
-				i ++;
-				n = n.getNext();
+			i ++;
+			n = n.getNext();
 		}
 		
 		list.size = i;
