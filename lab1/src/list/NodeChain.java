@@ -48,21 +48,7 @@ public class NodeChain<E> implements Iterable<Node<E>> {
 	}
 	
 	/**
-	 * Find the node index with a certain value.
-	 * @param value - the value to find.
-	 * @return
-	 */
-	public int findIndex(E value) {
-		return this.first.findNodeIndex(value);
-	}
-	
-	@Deprecated
-	public E findValue(int index) {
-		return this.first.findNodeValue(index);
-	}
-	
-	/**
-	 * Find the node at a specified index.
+	 * Find the node at a specified index. This function returns a node, not a value(!)
 	 * @param index - The index.
 	 * @return Node at the index.
 	 */

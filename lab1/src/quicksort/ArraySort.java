@@ -1,20 +1,14 @@
 package quicksort;
 
-public class ArraySort implements QuickSort<int[]>{
+import java.util.Random;
 
-	public ArraySort() {
-		// TODO Auto-generated constructor stub
-	}
+public class ArraySort implements QuickSort<int[]>{
 	
 	@Override
 	public void sort(int[] list, PivotPositions pivot) throws UnsupportedPivotException{
 		switch(pivot) {
-		case FIRST:
-			// TODO
-			break;
-		case RANDOM:
-			break;
-		case MIDDLE:
+		case BENCHMARK:
+			this.sort(list, 0,list.length-1);
 			break;
 		default:
 			throw new UnsupportedPivotException(pivot);
@@ -30,8 +24,14 @@ public class ArraySort implements QuickSort<int[]>{
 	 * @param lowIndex
 	 * @param highIndex
 	 */
-	public void sort(int[] list, int lowIndex, int highIndex) {
+	private void sort(int[] list, int lowIndex, int highIndex) {
 		if(lowIndex < highIndex) {
+			
+			int rand = new Random().nextInt(highIndex+1-lowIndex)+lowIndex;
+			int temp = list[highIndex];
+			list[highIndex] = list[rand];
+			list[rand] = temp;
+			
 			int partitionIndex = partition(list, lowIndex, highIndex);
 			 // Sortera vänster och höger om partitionIndex allstå PIVOT.
 			sort(list, lowIndex, partitionIndex-1);
@@ -69,11 +69,4 @@ public class ArraySort implements QuickSort<int[]>{
 		return index+1;
 		
 	}
-
-	@Override
-	public int getComparisons() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

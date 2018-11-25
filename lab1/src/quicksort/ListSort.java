@@ -13,7 +13,6 @@ import sortingAnalyzer.QuickSortAnalyzer;
  *
  */
 public class ListSort implements QuickSort<NodeList<Integer>> {
-	private int comparisons;
 	
 	@Deprecated
 	public static void main(String[] args) {
@@ -32,7 +31,6 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 
 	@Override
 	public void sort(NodeList<Integer> list, PivotPositions pivot) throws UnsupportedPivotException {
-		this.comparisons = 0;
 		switch (pivot) {
 		case FIRST:
 			this.sortFirst(list.createNodeChain());
@@ -132,6 +130,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 	 * 
 	 * @param list - The list to sort
 	 * @param pivot	- The pivot number.
+	 * @param pivIndex - the index for the pivot number.
 	 * @return The new pivot index. Useful if the pivot index is used directly after
 	 *         this function.
 	 */
@@ -141,19 +140,18 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 		}
 
 		int newIndex = pivIndex;
-		int i = 0;
 		Iterator<Node<Integer>> iterator = list.iterator();
 		Node<Integer> node;
-
+		
 		// First iterate from index 0 to pivIndex-1.
 		// Move to the right if the value is larger than the pivot value.
+		int i = 0;
 		for (; i < pivIndex; i++) {
 			node = iterator.next();
 			if (node.getValue() > pivot) {
 				list.moveLast(node);
 				newIndex--;
 			}
-			this.comparisons++;
 		}
 
 		// We have reached the pivot node. Skip it.
@@ -168,19 +166,8 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 				list.moveFirst(node);
 				newIndex++;
 			}
-			this.comparisons++;
 		}
 		return newIndex;
-	}
-
-	@Override
-	public int getComparisons() {
-		return this.comparisons;
-	}
-
-	@Override
-	public String toString() {
-		return "comparisons: " + this.comparisons;
 	}
 }
  

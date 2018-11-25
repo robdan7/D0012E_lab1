@@ -1,8 +1,5 @@
 package sortingAnalyzer;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Random;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
@@ -12,18 +9,17 @@ import jxl.write.Number;
 import jxl.write.biff.RowsExceededException;
 import list.NodeList;
 import misc.Tuple;
-import quicksort.ListSort;
-import quicksort.QuickSort;
-import quicksort.QuickSort.PivotPositions;
-import quicksort.QuickSort.UnsupportedPivotException;
+import quicksort.*;
+import quicksort.QuickSort.*;
 
 /**
- * 
+ * Class for testing the quicksort algorithm.
  * @author Robin, Oskar
  *
  */
 public class QuickSortAnalyzer {
-	private ListSort sorter;
+	private QuickSort<NodeList<Integer>> sorter;
+	private QuickSort<int[]> benchmarkSorter;
 	private int intervalSize, iterations;
 	private ListProvider listprovider;
 	
@@ -31,8 +27,7 @@ public class QuickSortAnalyzer {
 	 * Variables for storing all the data.
 	 */
 	private NodeList<Tuple<PivotPositions,long[]>> timings;
-	private NodeList<Tuple<PivotPositions,int[]>> comparisons;
-	private NodeList<Integer> listSizes;
+	private NodeList<Integer> listSizes;	// stores the list size for every iteration of testing.
 	
 	
 	
@@ -40,25 +35,22 @@ public class QuickSortAnalyzer {
 		this.intervalSize = intervalSize;
 		this.iterations = iterations;
 		this.sorter = new ListSort();
+		benchmarkSorter = new ArraySort();
 		this.listprovider = new ListProvider();
 		
 		this.timings = new NodeList<Tuple<PivotPositions,long[]>>();
-		this.comparisons = new NodeList<Tuple<PivotPositions,int[]>>();
 		this.listSizes = new NodeList<Integer>();
 		
+		// Create tuples with pivot and an array. Put them in the timing list.
 		for (PivotPositions p : PivotPositions.values()) {
-			Tuple tup = new Tuple<PivotPositions,long[]>(p, new long[this.iterations]);
-			this.timings.appendEnd(tup);
-			
-			tup = new Tuple<PivotPositions,int[]>(p, new int[this.iterations]);
-			this.comparisons.appendEnd(tup);
+			this.timings.appendEnd(new Tuple<PivotPositions,long[]>(p, new long[this.iterations]));
 		}
 	}
 
 	/**
 	 * Main method
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		Scanner consoleScanner = new Scanner(System.in);
 
 		System.out.print("Enter sorting interval size:");
@@ -77,6 +69,10 @@ public class QuickSortAnalyzer {
 	
 	}
 
+	/**
+	 * First test the algorithm and then export the data to an .xls file.
+	 * @param exportFile
+	 */
 	private void analyzeListAndExport(String exportFile) {
 		System.out.println("Sorting...");
 		try {
@@ -104,30 +100,27 @@ public class QuickSortAnalyzer {
 	 */
 	public void analyzeInterval() throws UnsupportedPivotException {
 		NodeList<Integer> list;
-		Iterator<Tuple<PivotPositions, long[]>> timingIterator;
-		Iterator<Tuple<PivotPositions, int[]>> comparisonIterator;
-		Tuple<PivotPositions, long[]> timingTuple;
-		Tuple<PivotPositions, int[]> comparisonTuple;
 
 		for (int i = 0, j = this.intervalSize; i < this.iterations; i++, j += this.intervalSize) {
 			list = this.listprovider.next(j);			// create one list as source.
 			this.listSizes.appendEnd(list.getSize());	// this is useful if we have custom list sizes.
-			timingIterator = this.timings.iterator();
-			comparisonIterator = this.comparisons.iterator();
+
 			
-			// we need to iterate over two lists at the same time. Use iterators.
-			while (timingIterator.hasNext() && comparisonIterator.hasNext()) {
-				timingTuple = timingIterator.next();
-				timingTuple.y[i] = this.analyzeSingular(list.copy(), timingTuple.x);	// use a copy of the original list.
+			for (Tuple<PivotPositions,long[]> timingTuple : this.timings) {
 				
-				comparisonTuple = comparisonIterator.next();
-				comparisonTuple.y[i] = this.sorter.getComparisons();
+				timingTuple.y[i] = this.analyzeSingular(list.copy(), timingTuple.x);	// use a copy of the original list.
 			}
 		}
 		
 	}
 	
 	private long analyzeSingular(NodeList<Integer> list, PivotPositions pivot) throws UnsupportedPivotException {
+		
+		if (pivot.equals(PivotPositions.BENCHMARK)) {
+			int[] array = this.createArray(list);
+			return this.analyzeArray(array, pivot);
+		}
+		
 		long oldTime = System.currentTimeMillis();
 		
 		this.sorter.sort(list, pivot);
@@ -137,41 +130,38 @@ public class QuickSortAnalyzer {
 		return newTime-oldTime;
 	}
 	
-	@Deprecated
-	/**
-	 * Sort a random list several times with the same size. The result is the algorithms average time which is put in a
-	 * private list obtained by calling {@link #toString()}.
-	 * @param pivot - The pivot element.
-	 * @throws UnsupportedPivotException 
-	 */
-	public void analyzeRepeated(PivotPositions pivot) throws UnsupportedPivotException {
-		/*NodeList<Integer> list;
-		this.timings = new long[1];		
-		this.comparisons = new float[1];
-		double averageTime = 0;
-		float averageComparison = 0;
-		double oldTime, newTime;
-		for (int i = 0; i < this.iterations; i++) {
-			list = generateList(this.intervalSize);
-			
-			
-			oldTime = System.currentTimeMillis();
-			this.sorter.sort(list, pivot);
-			newTime = System.currentTimeMillis();
-			averageTime += (newTime - oldTime);
-			averageComparison += this.sorter.getComparisons();
+	private long analyzeArray(int[] array, PivotPositions pivot) throws UnsupportedPivotException {
+		long oldTime = System.currentTimeMillis();
+		
+		this.benchmarkSorter.sort(array, pivot);
+		NodeList<Integer> list = new NodeList<Integer>();
+		for (int i = 0; i < array.length; i++) {
+			list.appendEnd(array[i]);
 		}
-		averageTime /= this.iterations;
-		averageComparison /= this.iterations;
-		this.timings[0] = averageTime;
-		this.comparisons[0] = averageComparison;
-		*/
+		
+		long newTime = System.currentTimeMillis();
+		
+		return newTime-oldTime;
 	}
 	
-
+	/**
+	 * Helper method for {@link #analyzeArray(int[])}.
+	 * @return
+	 */
+	private int[] createArray(NodeList<Integer> list) {
+		int[] resultArray = new int[list.getSize()];
+		int i = 0;
+		for (int num : list) {
+			resultArray[i] = num;
+			i ++;
+		}
+		
+		return resultArray;
+	}
 	
 	/**
-	 * Export all data to an auto-generated "Microsoft Excel �" file.
+	 * Export all data to an auto-generated .xls file.
+	 * @param filename - the name of the file.
 	 * @throws IOException 
 	 * @throws WriteException 
 	 * @throws RowsExceededException 
@@ -180,7 +170,7 @@ public class QuickSortAnalyzer {
 		int row, column;
 		
 		
-		WritableWorkbook book = Workbook.createWorkbook(new File(filename));
+		WritableWorkbook book = Workbook.createWorkbook(new File(filename + ".xls"));
 		WritableSheet sheet = book.createSheet("sheet1", 0);
 		
 		row = 0;
@@ -216,6 +206,7 @@ public class QuickSortAnalyzer {
 		book.close();
 	}
 	
+	@Deprecated
 	@Override
 	public String toString() {
 		String s = "Timings: \n";

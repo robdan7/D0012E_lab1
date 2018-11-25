@@ -47,47 +47,7 @@ public class NodeList<A> implements Iterable<A> {
 	public void appendStart(A item) {
 		this.size ++;
 		this.start.insertNext(new Node<A>(item));
-}
-	
-	@Deprecated
-	/**
-	 * find a node based on index.
-	 * @param i
-	 * @return
-	 */
-	public Node<A> findNode(int i) {
-		if (i >= this.getSize() || this.getSize() == 0) {
-			throw new IndexOutOfBoundsException();
-		}
-		return this.start.getNext().findNode(i);
-	}
-	
-	@Deprecated
-	/**
-	 * Create a list subset of this list. DO NOT USE THIS.
-	 * @param start - the start node.
-	 * @param end - the end node.
-	 */
-	public NodeList<A> createListSubset(Node<A> start, Node<A> end) {
-		NodeList<A> list = new NodeList<A>();
-		
-		int i = 1;
-		Node<A> n = start;
-		
-
-		while (n != null && !n.equals(end)) {
-			i ++;
-			n = n.getNext();
-		}
-		
-		list.size = i;
-
-		
-		start.insertPrevious(list.start);
-		end.insertNext(list.end);
-		return list;
-	}
-	
+}	
 
 	/**
 	 * @return The first element in the list.
