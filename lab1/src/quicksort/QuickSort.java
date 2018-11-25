@@ -1,7 +1,5 @@
 package quicksort;
 
-import quicksort.QuickSort.PivotPositions;
-
 public interface QuickSort<A> {
 	
 	public void sort(A list, PivotPositions pivot) throws UnsupportedPivotException;

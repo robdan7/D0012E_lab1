@@ -3,8 +3,6 @@ package quicksort;
 import java.util.Iterator;
 import list.*;
 import misc.Tuple;
-import quicksort.QuickSort.PivotPositions;
-import sortingAnalyzer.QuickSortAnalyzer;
 
 /**
  * Class for quick-sort operations.
