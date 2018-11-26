@@ -5,7 +5,7 @@ public interface QuickSort<A> {
 	public void sort(A list, PivotPositions pivot) throws UnsupportedPivotException;
 	
 	public static enum PivotPositions {
-		FIRST, RANDOM, MIDDLE, BENCHMARK;
+		FIRST, RANDOM, MIDDLE;
 
 		@Override
 		public String toString() {
@@ -20,8 +20,6 @@ public interface QuickSort<A> {
 			case MIDDLE:
 				s = "middle";
 				break;
-			case BENCHMARK:			// this should not be here. Temporary fix.
-				s = "benchmark";
 			}
 			return s;
 		}

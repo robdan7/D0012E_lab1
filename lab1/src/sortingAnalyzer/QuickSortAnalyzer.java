@@ -11,17 +11,25 @@ import list.NodeList;
 import misc.Tuple;
 import quicksort.*;
 import quicksort.QuickSort.*;
+import sortingAnalyzer.providers.ArrayQuickSortProvider;
+import sortingAnalyzer.providers.ListProvider;
+import sortingAnalyzer.providers.ListQuickSortProvider;
+import sortingAnalyzer.providers.NodeListProvider;
+import sortingAnalyzer.providers.QuickSortProvider;
 
 /**
  * Class for testing the quicksort algorithm.
  * @author Robin, Oskar
  *
  */
-public class QuickSortAnalyzer {
-	private QuickSort<NodeList<Integer>> sorter;
-	private QuickSort<int[]> benchmarkSorter;
+public class QuickSortAnalyzer<A> {
+	//private QuickSort<NodeList<Integer>> sorter;
+	//private QuickSort<int[]> benchmarkSorter;
 	private int intervalSize, iterations;
-	private ListProvider listprovider;
+	//private ListProvider<NodeList<Integer>> listprovider;
+	
+	@SuppressWarnings("rawtypes")
+	private QuickSortProvider<A> sortProvider;
 	
 	/*
 	 * Variables for storing all the data.
@@ -31,12 +39,13 @@ public class QuickSortAnalyzer {
 	
 	
 	
-	public QuickSortAnalyzer(int intervalSize, int iterations) {
+	public QuickSortAnalyzer(int intervalSize, int iterations, QuickSortProvider<A> sortProvider) {
 		this.intervalSize = intervalSize;
 		this.iterations = iterations;
-		this.sorter = new ListSort();
-		benchmarkSorter = new ArraySort();
-		this.listprovider = new ListProvider();
+		this.sortProvider = sortProvider;
+		//this.sorter = new ListSort();
+		//benchmarkSorter = new ArraySort();
+		//this.listprovider = new NodeListProvider();
 		
 		this.timings = new NodeList<Tuple<PivotPositions,long[]>>();
 		this.listSizes = new NodeList<Integer>();
@@ -64,7 +73,10 @@ public class QuickSortAnalyzer {
 
 		consoleScanner.close();
 		
-		QuickSortAnalyzer analyzer = new QuickSortAnalyzer(interval, iterations);
+		QuickSortProvider<int[]> provider = new ArrayQuickSortProvider();
+		
+		@SuppressWarnings("unchecked")
+		QuickSortAnalyzer<int[]> analyzer = new QuickSortAnalyzer(interval, iterations, provider);
 		analyzer.analyzeListAndExport(expoFile);
 	
 	}
@@ -99,41 +111,37 @@ public class QuickSortAnalyzer {
 	 * @throws UnsupportedPivotException 
 	 */
 	public void analyzeInterval() throws UnsupportedPivotException {
-		NodeList<Integer> list;
+		A list;
 
 		for (int i = 0, j = this.intervalSize; i < this.iterations; i++, j += this.intervalSize) {
-			list = this.listprovider.next(j);			// create one list as source.
-			this.listSizes.appendEnd(list.getSize());	// this is useful if we have custom list sizes.
-
+			list = this.sortProvider.getListProvider().next(j, NodeListProvider.listCriteria.RANDOM);			// create one list as source.
+			this.listSizes.appendEnd(j);	// this is useful if we have custom list sizes.
 			
 			for (Tuple<PivotPositions,long[]> timingTuple : this.timings) {
 				
-				timingTuple.y[i] = this.analyzeSingular(list.copy(), timingTuple.x);	// use a copy of the original list.
+				timingTuple.y[i] = this.analyzeSingular(this.sortProvider.getListProvider().replicate(list), timingTuple.x);	// use a copy of the original list.
 			}
 		}
 		
 	}
 	
-	private long analyzeSingular(NodeList<Integer> list, PivotPositions pivot) throws UnsupportedPivotException {
-		
-		if (pivot.equals(PivotPositions.BENCHMARK)) {
-			int[] array = this.createArray(list);
-			return this.analyzeArray(array, pivot);
-		}
-		
+	private long analyzeSingular(A list, PivotPositions pivot) throws UnsupportedPivotException {
+	
 		long oldTime = System.currentTimeMillis();
 		
-		this.sorter.sort(list, pivot);
+		//this.sorter.sort(list, pivot);
+		this.sortProvider.getQuickSorter().sort(list, pivot);
 		
 		long newTime = System.currentTimeMillis();
 		
 		return newTime-oldTime;
 	}
 	
+	@Deprecated
 	private long analyzeArray(int[] array, PivotPositions pivot) throws UnsupportedPivotException {
 		long oldTime = System.currentTimeMillis();
 		
-		this.benchmarkSorter.sort(array, pivot);
+		//this.benchmarkSorter.sort(array, pivot);
 		NodeList<Integer> list = new NodeList<Integer>();
 		for (int i = 0; i < array.length; i++) {
 			list.appendEnd(array[i]);

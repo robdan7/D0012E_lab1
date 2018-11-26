@@ -133,7 +133,7 @@ public class NodeList<A> implements Iterable<A> {
 	}
 	
 
-	public NodeList<A> copy() {
+	public NodeList<A> clone() {
 		NodeList<A> newList = new NodeList<A>();
 		for (A value : this) {
 			newList.appendEnd(value);
