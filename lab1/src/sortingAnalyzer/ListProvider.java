@@ -63,15 +63,62 @@ public class ListProvider {
 	 * @param requestedSize
 	 * @return The next list in order.
 	 */
-	public NodeList<Integer> next(int requestedSize) {
-		if (this.lists.isEmpty()) {
-			return this.generateList(requestedSize);
+	public NodeList<Integer> next(int requestedSize, listCriteria criteria) {
+		NodeList<Integer> result = new NodeList<Integer>();
+		switch (criteria) {
+			case RANDOM:
+				result = this.nextRandom(requestedSize);
+				break;
+			case SORTED:
+				result = this.nextSorted(requestedSize);
+				break;
+			case ALMOST_SORTED_75:
+				result = this.nextSorted75(requestedSize);
+				break;
+			case ALMOST_SORTED_50:
+				result = this.nextSorted50(requestedSize);
+				break;
+			default:
+				// TODO
+				break;
 		}
 		
-		NodeList<Integer> list = this.lists.getFirst();
+		return result;
+	}
+	
+	private NodeList<Integer> nextRandom(int size) {
+		NodeList<Integer> list = new NodeList<Integer>();
+		if (this.lists.isEmpty()) {
+			list = this.generateRandom(size);
+		}
+		
+		list = this.lists.getFirst();
 		this.lists.rmFirst();
 		
 		return list;
+	}
+	
+	private NodeList<Integer> nextSorted(int size) {
+		NodeList<Integer> list = new NodeList<Integer>();
+		if (this.lists.isEmpty()) {
+			for (int i = 0; i < size; i++) {
+				list.appendEnd(i);
+			}
+			return list;
+		}
+		
+		list = this.lists.getFirst();
+		this.lists.rmFirst();
+		
+		return list;
+	}
+	
+	private NodeList<Integer> nextSorted75(int size) {
+		return null;
+	}
+	
+	private NodeList<Integer> nextSorted50(int size) {
+		return null;
 	}
 	
 	/**
@@ -79,7 +126,7 @@ public class ListProvider {
 	 * @param size - The size.
 	 * @return A list with pseudo-random numbers.
 	 */
-	private NodeList<Integer> generateList(int size) {
+	private NodeList<Integer> generateRandom(int size) {
 		NodeList<Integer> list = new NodeList<Integer>();
 		Random r = new Random();
 		for (int i = 0; i < size; i++) {
@@ -87,6 +134,14 @@ public class ListProvider {
 		}
 		
 		return list;
+	}
+	
+	private NodeList<Integer> generateSorted() {
+		return null;
+	}
+	
+	public static enum listCriteria {
+		RANDOM, SORTED, ALMOST_SORTED_75, ALMOST_SORTED_50;
 	}
 
 }
