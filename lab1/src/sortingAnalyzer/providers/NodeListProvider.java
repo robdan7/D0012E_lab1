@@ -11,7 +11,6 @@ import list.NodeList;
  *
  */
 public class NodeListProvider implements ListProvider<NodeList<Integer>> {
-	//private static final String regex = ",";
 	
 
 	@Override
@@ -45,23 +44,17 @@ public class NodeListProvider implements ListProvider<NodeList<Integer>> {
 
 	@Override
 	public NodeList<Integer> nextSorted(int size) {
-		NodeList<Integer> list = new NodeList<Integer>();
-
-		for (int i = 0; i < size; i++) {
-			list.appendEnd(i);
-		}
-		return list;
-
+		return this.generateSorted(size);
 	}
 	
 	@Override
 	public NodeList<Integer> nextSorted80(int size) {
-		return null;
+		return this.generateSortedPercentage(size, 0.8f);
 	}
 	
 	@Override
 	public NodeList<Integer> nextSorted75(int size) {
-		return null;
+		return this.generateSortedPercentage(size, 0.75f);
 	}
 	
 	/**
@@ -79,8 +72,45 @@ public class NodeListProvider implements ListProvider<NodeList<Integer>> {
 		return list;
 	}
 	
-	private NodeList<Integer> generateSorted() {
-		return null;
+	/**
+	 * Generate a sorted list with integers.
+	 * @param size
+	 * @return
+	 */
+	private NodeList<Integer> generateSorted(int size) {
+		NodeList<Integer> list = new NodeList<Integer>();
+		for (int i = 0; i < size; i++) {
+			list.appendEnd(i);
+		}
+		return list;
+	}
+	
+	/**
+	 * Generate a partially sorted list with integers.
+	 * @param size
+	 * @param sortedPercentage - percentage in decimal form.
+	 * @return
+	 */
+	private NodeList<Integer> generateSortedPercentage(int size, float sortedPercentage) {
+		
+		if (sortedPercentage < 0f || sortedPercentage > 1.0f) {
+			throw new IllegalArgumentException("percentage out of range");
+		}
+		
+		NodeList<Integer> list = new NodeList<Integer>();
+		Random r = new Random();
+		for (int i = 0, num = 0; i < size; i++) {
+			num = i;
+			if (r.nextFloat() < (1.0f-sortedPercentage)) {
+				while (num == i) {		// make sure num is a different number.
+					num = r.nextInt();
+				}
+			}
+			
+			list.appendEnd(num);
+		}
+		
+		return list;
 	}
 
 	@Override

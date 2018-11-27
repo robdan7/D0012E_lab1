@@ -59,15 +59,25 @@ public class ArrayListProvider implements ListProvider<int[]> {
 		return null;
 	}
 	
+	/**
+	 * Generate a list with random integer.
+	 * @param size
+	 * @return
+	 */
 	private int[] generateRandom(int size) {
 		int[] list = new int[size];
 		Random r = new Random();
 		for (int i = 0; i < list.length; i++) {
-			list[i] = r.nextInt(size);
+			list[i] = r.nextInt();
 		}
 		return list;
 	}
 	
+	/**
+	 * Generate a list with sorted integers.
+	 * @param size
+	 * @return
+	 */
 	private int[] generateSorted(int size) {
 		int[] list = new int[size];
 		

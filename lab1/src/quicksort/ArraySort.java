@@ -25,6 +25,7 @@ public class ArraySort implements QuickSort<int[]>{
 		if(lowIndex < highIndex) {
 			
 			// Swap out the last number and the first.
+			
 			int temp = list[highIndex];
 			list[highIndex] = list[lowIndex];
 			list[lowIndex] = temp;
@@ -44,7 +45,12 @@ public class ArraySort implements QuickSort<int[]>{
 			int temp = list[highIndex];
 			list[highIndex] = list[rand];
 			list[rand] = temp;
-			
+			/*
+			for (int i : list) {
+				System.out.print(i + " ");
+			}
+			System.out.println("");
+			*/
 			int partitionIndex = partition(list, lowIndex, highIndex);
 			 // Sortera vänster och höger om partitionIndex allstå PIVOT.
 			this.sortRandom(list, lowIndex, partitionIndex-1);
@@ -69,41 +75,14 @@ public class ArraySort implements QuickSort<int[]>{
 			
 		}
 	}
-	
-	
-//	Fungerande quicksortkod typ , work in progress.
-	
+
 	
 	/**
 	 * @author Oskar
-	 * @param list
-	 * @param lowIndex
-	 * @param highIndex
-	 */
-	@Deprecated
-	private void sort(int[] list, int lowIndex, int highIndex) {
-		if(lowIndex < highIndex) {
-			
-			int rand = new Random().nextInt(highIndex+1-lowIndex)+lowIndex;
-			int temp = list[highIndex];
-			list[highIndex] = list[rand];
-			list[rand] = temp;
-			
-			int partitionIndex = partition(list, lowIndex, highIndex);
-			 // Sortera vänster och höger om partitionIndex allstå PIVOT.
-			sort(list, lowIndex, partitionIndex-1);
-			sort(list, partitionIndex+1, highIndex);
-			
-		}
-		
-	}
-	
-	/**
-	 * @author Oskar
-	 * @param list
-	 * @param lowIndex
-	 * @param highIndex
-	 * @return
+	 * @param list - integer list.
+	 * @param lowIndex - lowest index.
+	 * @param highIndex - highest index (included).
+	 * @return the index of the pivot element.
 	 */
 	private int partition(int[] list, int lowIndex, int highIndex) {
 		int pivot = list[highIndex];
@@ -112,8 +91,8 @@ public class ArraySort implements QuickSort<int[]>{
 			if(list[i] <= pivot) {
 				index++;
 				//Swap
-				int temp = list[index+1];
-				list[index+1] = list[i];
+				int temp = list[index];
+				list[index] = list[i];
 				list[i] = temp;
 			}
 			

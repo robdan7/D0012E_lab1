@@ -11,6 +11,7 @@ import list.NodeList;
 import misc.Tuple;
 import quicksort.QuickSort.*;
 import sortingAnalyzer.providers.ArrayQuickSortProvider;
+import sortingAnalyzer.providers.ListQuickSortProvider;
 import sortingAnalyzer.providers.NodeListProvider;
 import sortingAnalyzer.providers.QuickSortProvider;
 
@@ -108,8 +109,15 @@ public class QuickSortAnalyzer<A> {
 	public void analyzeInterval() throws UnsupportedPivotException {
 		A list;
 
-		for (int i = 0, j = this.intervalSize; i < this.iterations; i++, j += this.intervalSize) {
+		for (int i = 0, j = this.intervalSize, k = 0; i < this.iterations; i++, j += this.intervalSize, k++) {
+			
+			if (k >= this.iterations/10) {
+				System.out.print("+");
+				k = 0;
+			}
+			
 			list = this.sortProvider.getListProvider().next(j, NodeListProvider.listCriteria.RANDOM);			// create one list as source.
+			
 			this.listSizes.appendEnd(j);	// this is useful if we have custom list sizes.
 			
 			for (Tuple<PivotPositions,long[]> timingTuple : this.timings) {
@@ -130,37 +138,6 @@ public class QuickSortAnalyzer<A> {
 		long newTime = System.currentTimeMillis();
 		
 		return newTime-oldTime;
-	}
-	
-	@Deprecated
-	private long analyzeArray(int[] array, PivotPositions pivot) throws UnsupportedPivotException {
-		long oldTime = System.currentTimeMillis();
-		
-		//this.benchmarkSorter.sort(array, pivot);
-		NodeList<Integer> list = new NodeList<Integer>();
-		for (int i = 0; i < array.length; i++) {
-			list.appendEnd(array[i]);
-		}
-		
-		long newTime = System.currentTimeMillis();
-		
-		return newTime-oldTime;
-	}
-	
-	/**
-	 * Helper method for {@link #analyzeArray(int[])}.
-	 * @return
-	 */
-	@Deprecated
-	private int[] createArray(NodeList<Integer> list) {
-		int[] resultArray = new int[list.getSize()];
-		int i = 0;
-		for (int num : list) {
-			resultArray[i] = num;
-			i ++;
-		}
-		
-		return resultArray;
 	}
 	
 	/**
@@ -192,13 +169,15 @@ public class QuickSortAnalyzer<A> {
 		}
 		
 
+		// for every pivot: add all data.
 		for (Tuple<PivotPositions, long[]> tup : this.timings) {
 			
 			row = 0;
-			column += 2;
+			column += 1;
 			label = new Label(column,row,tup.x.toString());
 			sheet.addCell(label);
 			
+			// add the sorting times.
 			for (int i = 0; i< tup.y.length; i++) {
 				row ++;
 				number = new Number(column, row, tup.y[i]);
