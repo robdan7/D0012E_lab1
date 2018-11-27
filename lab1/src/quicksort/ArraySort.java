@@ -73,13 +73,14 @@ public class ArraySort implements QuickSort<int[]>{
 	
 //	Fungerande quicksortkod typ , work in progress.
 	
-	@Deprecated
+	
 	/**
 	 * @author Oskar
 	 * @param list
 	 * @param lowIndex
 	 * @param highIndex
 	 */
+	@Deprecated
 	private void sort(int[] list, int lowIndex, int highIndex) {
 		if(lowIndex < highIndex) {
 			

@@ -1,9 +1,5 @@
 package sortingAnalyzer.providers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Random;
 
 import list.NodeList;
@@ -15,7 +11,7 @@ import list.NodeList;
  *
  */
 public class NodeListProvider implements ListProvider<NodeList<Integer>> {
-	private static final String regex = ",";
+	//private static final String regex = ",";
 	
 
 	@Override

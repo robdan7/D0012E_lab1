@@ -1,7 +1,5 @@
 package sortingAnalyzer.providers;
 
-import list.NodeList;
-
 /**
  * Generic interface for list providers.
  * @author Robin

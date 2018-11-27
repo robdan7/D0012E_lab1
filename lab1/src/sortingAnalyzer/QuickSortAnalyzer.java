@@ -9,11 +9,8 @@ import jxl.write.Number;
 import jxl.write.biff.RowsExceededException;
 import list.NodeList;
 import misc.Tuple;
-import quicksort.*;
 import quicksort.QuickSort.*;
 import sortingAnalyzer.providers.ArrayQuickSortProvider;
-import sortingAnalyzer.providers.ListProvider;
-import sortingAnalyzer.providers.ListQuickSortProvider;
 import sortingAnalyzer.providers.NodeListProvider;
 import sortingAnalyzer.providers.QuickSortProvider;
 
@@ -28,7 +25,6 @@ public class QuickSortAnalyzer<A> {
 	private int intervalSize, iterations;
 	//private ListProvider<NodeList<Integer>> listprovider;
 	
-	@SuppressWarnings("rawtypes")
 	private QuickSortProvider<A> sortProvider;
 	
 	/*
@@ -75,8 +71,7 @@ public class QuickSortAnalyzer<A> {
 		
 		QuickSortProvider<int[]> provider = new ArrayQuickSortProvider();
 		
-		@SuppressWarnings("unchecked")
-		QuickSortAnalyzer<int[]> analyzer = new QuickSortAnalyzer(interval, iterations, provider);
+		QuickSortAnalyzer<int[]> analyzer = new QuickSortAnalyzer<int[]>(interval, iterations, provider);
 		analyzer.analyzeListAndExport(expoFile);
 	
 	}
@@ -156,6 +151,7 @@ public class QuickSortAnalyzer<A> {
 	 * Helper method for {@link #analyzeArray(int[])}.
 	 * @return
 	 */
+	@Deprecated
 	private int[] createArray(NodeList<Integer> list) {
 		int[] resultArray = new int[list.getSize()];
 		int i = 0;

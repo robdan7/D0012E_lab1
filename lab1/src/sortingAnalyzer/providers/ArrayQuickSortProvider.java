@@ -1,6 +1,5 @@
 package sortingAnalyzer.providers;
 
-import list.NodeList;
 import quicksort.ArraySort;
 import quicksort.QuickSort;
 
