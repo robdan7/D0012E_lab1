@@ -1,6 +1,8 @@
 package quicksort;
 
 import java.util.Iterator;
+import java.util.Random;
+
 import list.*;
 import misc.Tuple;
 
@@ -11,6 +13,11 @@ import misc.Tuple;
  *
  */
 public class ListSort implements QuickSort<NodeList<Integer>> {
+	private Random r;
+	
+	public ListSort() {
+		r = new Random();
+	}
 	
 	@Deprecated
 	public static void main(String[] args) {
@@ -55,7 +62,7 @@ public class ListSort implements QuickSort<NodeList<Integer>> {
 		if (list == null || list.getSize() <= 1) { // Return if the list has 1 or 0 elements.
 			return;
 		}
-		int pivotIndex = (int)(Math.random() * list.getSize());
+		int pivotIndex = (int)(r.nextFloat() * list.getSize());
 
 		// Splits the chain into two parts.
 		Tuple<NodeChain<Integer>, NodeChain<Integer>> split = this.recursiveSorter(list, pivotIndex);

@@ -17,6 +17,7 @@ import sortingAnalyzer.providers.QuickSortProvider;
 
 /**
  * Class for testing the quicksort algorithm.
+ * This program uses the Java Excel API downloaded from <a href = "http://jexcelapi.sourceforge.net/">http://jexcelapi.sourceforge.net/</a>.
  * @author Robin, Oskar
  *
  */
@@ -71,7 +72,7 @@ public class QuickSortAnalyzer<A> {
 		consoleScanner.close();
 		
 		QuickSortProvider<int[]> provider = new ArrayQuickSortProvider();
-		
+		provider.getQuickSorter();
 		QuickSortAnalyzer<int[]> analyzer = new QuickSortAnalyzer<int[]>(interval, iterations, provider);
 		analyzer.analyzeListAndExport(expoFile);
 	

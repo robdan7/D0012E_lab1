@@ -3,6 +3,11 @@ package quicksort;
 import java.util.Random;
 
 public class ArraySort implements QuickSort<int[]>{
+	private Random r;
+	
+	public ArraySort() {
+		r = new Random();
+	}
 	
 	@Override
 	public void sort(int[] list, PivotPositions pivot) throws UnsupportedPivotException{
@@ -25,7 +30,6 @@ public class ArraySort implements QuickSort<int[]>{
 		if(lowIndex < highIndex) {
 			
 			// Swap out the last number and the first.
-			
 			int temp = list[highIndex];
 			list[highIndex] = list[lowIndex];
 			list[lowIndex] = temp;
@@ -41,16 +45,11 @@ public class ArraySort implements QuickSort<int[]>{
 	private void sortRandom(int[] list, int lowIndex, int highIndex) {
 		if(lowIndex < highIndex) {
 			
-			int rand = new Random().nextInt(highIndex+1-lowIndex)+lowIndex;
+			int rand = r.nextInt(highIndex+1-lowIndex)+lowIndex;
 			int temp = list[highIndex];
 			list[highIndex] = list[rand];
 			list[rand] = temp;
-			/*
-			for (int i : list) {
-				System.out.print(i + " ");
-			}
-			System.out.println("");
-			*/
+
 			int partitionIndex = partition(list, lowIndex, highIndex);
 			 // Sortera vänster och höger om partitionIndex allstå PIVOT.
 			this.sortRandom(list, lowIndex, partitionIndex-1);

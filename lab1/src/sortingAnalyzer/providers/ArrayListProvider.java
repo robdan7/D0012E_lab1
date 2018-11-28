@@ -49,14 +49,34 @@ public class ArrayListProvider implements ListProvider<int[]> {
 
 	@Override
 	public int[] nextSorted80(int size) {
-		// TODO Auto-generated method stub
-		return null;
+		int[] list = this.generateSorted(size);
+		Random r = new Random();
+		for (int i = 0; i < list.length; i++) {
+			if (r.nextFloat() <= 0.2f) {
+				int temp = r.nextInt();
+				while (temp == list[i]) {
+					temp = r.nextInt();
+				}
+				list[i] = temp;
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public int[] nextSorted75(int size) {
-		// TODO Auto-generated method stub
-		return null;
+		int[] list = this.generateSorted(size);
+		Random r = new Random();
+		for (int i = 0; i < list.length; i++) {
+			if (r.nextFloat() <= 0.25f) {
+				int temp = r.nextInt();
+				while (temp == list[i]) {
+					temp = r.nextInt();
+				}
+				list[i] = temp;
+			}
+		}
+		return list;
 	}
 	
 	/**
