@@ -35,7 +35,7 @@ public interface ListProvider<A> {
 	 * @param size
 	 * @return
 	 */
-	public A nextSorted80(int size);
+	public A nextSorted90(int size);
 	
 	/**
 	 * Retrieve an 75% sorted list. Some elements are swapped out at random (25%).
@@ -58,7 +58,7 @@ public interface ListProvider<A> {
 	 *
 	 */
 	public static enum listCriteria {
-		RANDOM, SORTED, ALMOST_SORTED_80, ALMOST_SORTED_75;
+		RANDOM, SORTED, ALMOST_SORTED_90, ALMOST_SORTED_75;
 	}
 
 }

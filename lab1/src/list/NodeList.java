@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 /**
  * This class represents a list containing linked nodes. Every node has a link to the next and previous node.
- * @author Robin
+ * @author Robin, Oskar
  *
  */
 public class NodeList<A> implements Iterable<A> {
@@ -69,10 +69,18 @@ public class NodeList<A> implements Iterable<A> {
 		return this.end.getPrevious();
 	}
 	
+	/**
+	 * 
+	 * @return The first element in this list.
+	 */
 	public A getFirst() {
 		return this.getFirstNode().getValue();
 	}
 	
+	/**
+	 * 
+	 * @return The last element in this list.
+	 */
 	public A getLast() {
 		return this.getLastNode().getValue();
 	}
@@ -133,7 +141,7 @@ public class NodeList<A> implements Iterable<A> {
 	}
 	
 
-	public NodeList<A> clone() {
+	public NodeList<A> copy() {
 		NodeList<A> newList = new NodeList<A>();
 		for (A value : this) {
 			newList.appendEnd(value);

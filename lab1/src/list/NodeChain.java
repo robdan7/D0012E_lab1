@@ -6,7 +6,7 @@ import misc.Tuple;
 
 /**
  * This class represents a chain of nodes without start and stop nodes. Nodes cannot be removed or added.
- * @author Robin
+ * @author Robin, Oskar
  *
  * @param <E>
  */

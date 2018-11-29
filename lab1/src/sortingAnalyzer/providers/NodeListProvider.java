@@ -23,8 +23,8 @@ public class NodeListProvider implements ListProvider<NodeList<Integer>> {
 			case SORTED:
 				result = this.nextSorted(requestedSize);
 				break;
-			case ALMOST_SORTED_80:
-				result = this.nextSorted80(requestedSize);
+			case ALMOST_SORTED_90:
+				result = this.nextSorted90(requestedSize);
 				break;
 			case ALMOST_SORTED_75:
 				result = this.nextSorted75(requestedSize);
@@ -48,8 +48,8 @@ public class NodeListProvider implements ListProvider<NodeList<Integer>> {
 	}
 	
 	@Override
-	public NodeList<Integer> nextSorted80(int size) {
-		return this.generateSortedPercentage(size, 0.8f);
+	public NodeList<Integer> nextSorted90(int size) {
+		return this.generateSortedPercentage(size, 0.9f);
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ public class NodeListProvider implements ListProvider<NodeList<Integer>> {
 		for (int i = 0, num = 0; i < size; i++) {
 			num = i;
 			if (r.nextFloat() < (1.0f-sortedPercentage)) {
-				while (num == i) {		// make sure num is a different number.
+				while (Math.abs(num-i) <= 1) {		// make sure num is a number out of order.
 					num = r.nextInt();
 				}
 			}
@@ -115,7 +115,7 @@ public class NodeListProvider implements ListProvider<NodeList<Integer>> {
 
 	@Override
 	public NodeList<Integer> replicate(NodeList<Integer> list) {
-		return list.clone();
+		return list.copy();
 	}
 	
 	

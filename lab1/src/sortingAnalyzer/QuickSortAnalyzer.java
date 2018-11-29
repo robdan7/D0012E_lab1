@@ -22,10 +22,8 @@ import sortingAnalyzer.providers.QuickSortProvider;
  *
  */
 public class QuickSortAnalyzer<A> {
-	//private QuickSort<NodeList<Integer>> sorter;
-	//private QuickSort<int[]> benchmarkSorter;
 	private int intervalSize, iterations;
-	//private ListProvider<NodeList<Integer>> listprovider;
+
 	
 	private QuickSortProvider<A> sortProvider;
 	
@@ -36,14 +34,16 @@ public class QuickSortAnalyzer<A> {
 	private NodeList<Integer> listSizes;	// stores the list size for every iteration of testing.
 	
 	
-	
+	/**
+	 * Create a quick-sort analyzer that can analyze stuff.
+	 * @param intervalSize - The interval size for every sorting iteration.
+	 * @param iterations - The total number of iterations to perform.
+	 * @param sortProvider - The sorter to use. This can be basically anything.
+	 */
 	public QuickSortAnalyzer(int intervalSize, int iterations, QuickSortProvider<A> sortProvider) {
 		this.intervalSize = intervalSize;
 		this.iterations = iterations;
 		this.sortProvider = sortProvider;
-		//this.sorter = new ListSort();
-		//benchmarkSorter = new ArraySort();
-		//this.listprovider = new NodeListProvider();
 		
 		this.timings = new NodeList<Tuple<PivotPositions,long[]>>();
 		this.listSizes = new NodeList<Integer>();
@@ -55,34 +55,10 @@ public class QuickSortAnalyzer<A> {
 	}
 
 	/**
-	 * Main method
-	 */
-	public static void main(String[] args) {		
-		Scanner consoleScanner = new Scanner(System.in);
-
-		System.out.print("Enter sorting interval size:");
-		int interval = Integer.parseInt(consoleScanner.nextLine());	// The scanner does weird things if we input integers instead.
-		
-		System.out.print("Enter iterations:");
-		int iterations = Integer.parseInt(consoleScanner.nextLine());
-		
-		System.out.print("Enter Excel export file:");
-		String expoFile = consoleScanner.nextLine();
-
-		consoleScanner.close();
-		
-		QuickSortProvider<int[]> provider = new ArrayQuickSortProvider();
-		provider.getQuickSorter();
-		QuickSortAnalyzer<int[]> analyzer = new QuickSortAnalyzer<int[]>(interval, iterations, provider);
-		analyzer.analyzeListAndExport(expoFile);
-	
-	}
-
-	/**
 	 * First test the algorithm and then export the data to an .xls file.
 	 * @param exportFile
 	 */
-	private void analyzeListAndExport(String exportFile) {
+	public void analyzeListAndExport(String exportFile) {
 		System.out.println("Sorting...");
 		try {
 			this.analyzeInterval();
@@ -117,32 +93,39 @@ public class QuickSortAnalyzer<A> {
 				k = 0;
 			}
 			
-			list = this.sortProvider.getListProvider().next(j, NodeListProvider.listCriteria.RANDOM);			// create one list as source.
+			list = this.sortProvider.getListProvider().next(j, NodeListProvider.listCriteria.ALMOST_SORTED_75);			// create one list as source.
 			
 			this.listSizes.appendEnd(j);	// this is useful if we have custom list sizes.
 			
 			for (Tuple<PivotPositions,long[]> timingTuple : this.timings) {
-				
-				timingTuple.y[i] = this.analyzeSingular(this.sortProvider.getListProvider().replicate(list), timingTuple.x);	// use a copy of the original list.
+				A listCopy = this.sortProvider.getListProvider().replicate(list);
+				timingTuple.y[i] = this.analyzeSingular(listCopy, timingTuple.x);	// use a copy of the original list.
 			}
 		}
 		
 	}
 	
+	/**
+	 * Analyze one list with one pivot. This is a helper function for {@link #analyzeInterval()} 
+	 * that doesn't do much.
+	 * @param list
+	 * @param pivot
+	 * @return
+	 * @throws UnsupportedPivotException
+	 */
 	private long analyzeSingular(A list, PivotPositions pivot) throws UnsupportedPivotException {
 	
 		long oldTime = System.currentTimeMillis();
-		
-		//this.sorter.sort(list, pivot);
 		this.sortProvider.getQuickSorter().sort(list, pivot);
-		
 		long newTime = System.currentTimeMillis();
 		
 		return newTime-oldTime;
 	}
 	
 	/**
-	 * Export all data to an auto-generated .xls file.
+	 * Export all data to an auto-generated .xls file. This is so much easier than doing it manually.
+	 * check out <a href = "http://jexcelapi.sourceforge.net/">http://jexcelapi.sourceforge.net/</a>
+	 * for more info about excel exporting.
 	 * @param filename - the name of the file.
 	 * @throws IOException 
 	 * @throws WriteException 
@@ -155,6 +138,7 @@ public class QuickSortAnalyzer<A> {
 		WritableWorkbook book = Workbook.createWorkbook(new File(filename + ".xls"));
 		WritableSheet sheet = book.createSheet("sheet1", 0);
 		
+		// This is just some basic stuff we have yet not automated.
 		row = 0;
 		column = 0;
 		Label label = new Label(column,row,"sizes");
@@ -186,19 +170,8 @@ public class QuickSortAnalyzer<A> {
 			}
 		}
 		
+		// Note to self: Remember to write and close.
 		book.write();
 		book.close();
 	}
-	
-	@Deprecated
-	@Override
-	public String toString() {
-		String s = "Timings: \n";
-		/*for (int i = 0 ; i < this.timings.length; i++) {
-			s += "size: " + ((i+1)*this.intervalSize) + ". time: " + Double.toString(this.timings[i]) + 
-					". comparisons: " + Float.toString(this.comparisons[i]) + "\n";
-		}*/
-		return s;
-	}
-
 }

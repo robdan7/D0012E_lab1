@@ -1,9 +1,21 @@
 package quicksort;
 
+/**
+ * Interface for creating quick-sorter classes. Every class that inherits from this 
+ * interface can be used for sorting.
+ * @author Robin, Oskar
+ *
+ * @param <A>
+ */
 public interface QuickSort<A> {
 	
 	public void sort(A list, PivotPositions pivot) throws UnsupportedPivotException;
 	
+	/**
+	 * These values represents all possible pivots.
+	 * @author Robin
+	 *
+	 */
 	public static enum PivotPositions {
 		FIRST, RANDOM, MIDDLE;
 

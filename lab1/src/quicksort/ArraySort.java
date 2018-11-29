@@ -2,6 +2,11 @@ package quicksort;
 
 import java.util.Random;
 
+/**
+ * This class is purely made for internal testing. It does the same thing as {@link ListSort}, but it was not as fun to code.
+ * @author Robin, Oskar
+ *
+ */
 public class ArraySort implements QuickSort<int[]>{
 	private Random r;
 	

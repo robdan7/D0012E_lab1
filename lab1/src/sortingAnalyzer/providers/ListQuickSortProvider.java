@@ -4,6 +4,11 @@ import list.NodeList;
 import quicksort.ListSort;
 import quicksort.QuickSort;
 
+/**
+ * Quick-sort provider for linked lists.
+ * @author Robin
+ *
+ */
 public class ListQuickSortProvider implements QuickSortProvider<NodeList<Integer>> {
 	private ListProvider<NodeList<Integer>> listProvider;
 	private QuickSort<NodeList<Integer>> sorter;

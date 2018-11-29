@@ -2,7 +2,7 @@ package list;
 
 /**
  * Internal node class for lists and chains.
- * @author Robin
+ * @author Robin, Oskar
  *
  * @param <E> - The object type to use.
  */
@@ -122,10 +122,18 @@ public class Node<E> {
 		return this.previous;
 	}
 	
+	/**
+	 * 
+	 * @return <Strong>True</Strong> if this node has a neighbor after this node.
+	 */
 	boolean hasNext() {
 		return this.next != null;
 	}
 	
+	/**
+	 * 
+	 * @return <Strong>True</Strong> if this node has a neighbor before this node.
+	 */
 	boolean hasPrevious() {
 		return this.previous != null;
 	}
@@ -138,6 +146,10 @@ public class Node<E> {
 		return this.value;
 	}
 	
+	/**
+	 * Set the node value.
+	 * @param item
+	 */
 	void setValue(E item) {
 		this.value = item;
 	}

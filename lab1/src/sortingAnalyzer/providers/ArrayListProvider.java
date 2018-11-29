@@ -10,10 +10,6 @@ import java.util.Random;
  */
 public class ArrayListProvider implements ListProvider<int[]> {
 
-	public ArrayListProvider() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public int[] next(int requestedSize, listCriteria criteria) {
 		int[] result = new int[requestedSize];
@@ -24,8 +20,8 @@ public class ArrayListProvider implements ListProvider<int[]> {
 		case SORTED:
 			result = this.nextSorted(requestedSize);
 			break;
-		case ALMOST_SORTED_80:
-			result = this.nextSorted80(requestedSize);
+		case ALMOST_SORTED_90:
+			result = this.nextSorted90(requestedSize);
 			break;
 		case ALMOST_SORTED_75:
 			result = this.nextSorted75(requestedSize);
@@ -48,13 +44,14 @@ public class ArrayListProvider implements ListProvider<int[]> {
 	}
 
 	@Override
-	public int[] nextSorted80(int size) {
+	public int[] nextSorted90(int size) {
+		// this method and nextSorted75 could be put together, but I don't care enough to do that.
 		int[] list = this.generateSorted(size);
 		Random r = new Random();
 		for (int i = 0; i < list.length; i++) {
-			if (r.nextFloat() <= 0.2f) {
+			if (r.nextFloat() < 0.1f) {
 				int temp = r.nextInt();
-				while (temp == list[i]) {
+				while (Math.abs(temp - list[i]) <= 1) {
 					temp = r.nextInt();
 				}
 				list[i] = temp;
@@ -68,9 +65,9 @@ public class ArrayListProvider implements ListProvider<int[]> {
 		int[] list = this.generateSorted(size);
 		Random r = new Random();
 		for (int i = 0; i < list.length; i++) {
-			if (r.nextFloat() <= 0.25f) {
+			if (r.nextFloat() < 0.25f) {
 				int temp = r.nextInt();
-				while (temp == list[i]) {
+				while (Math.abs(temp - list[i]) <= 1) {
 					temp = r.nextInt();
 				}
 				list[i] = temp;

@@ -1,7 +1,7 @@
 package misc;
 
 /**
- * Tuple class.
+ * Generic Tuple class used for all your tuple needs.
  * @author Robin
  *
  * @param <X> - First element.
